@@ -1,10 +1,16 @@
 import networkx as nx
 
 class Vertex:
-    def __init__(self, key, name, area):
+    def __init__(self, key):
         self.key = key
         self.neighbors = {}
+        self.name = {}
+        self.area = {}
+
+    def add_name(self, name=None):
         self.name = name
+
+    def add_area(self, area=None):
         self.area = area
 
     def add_neighbor(self, neighbor, distance=None):
@@ -13,6 +19,26 @@ class Vertex:
     def get_shortestpath(self, key1, key2):
         path = nx.algorithms.shortest_path(self, key1, key2, weight='distance', method='dijkstra')
         print(path)
+
+
+class Path:
+    def __init__(self, key):
+        self.key = key
+        self.name = {}
+        self.direction = {}
+        self.accessibility = {}
+
+    def add_name(self, name=None):
+        self.name = name
+
+    def add_direction(self, direction=None):
+        self.direction = direction
+
+    def add_accessibility(self, accessibility = None):
+        self.accessibility = accessibility
+
+
+
 
 
 g = nx.DiGraph()
