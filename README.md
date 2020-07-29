@@ -1,13 +1,25 @@
 # A9 STL ZOO
 
-## Step 1
-Create network x model from zoo map (see pdf in repository)
-Add attributes
-- animal?
-- area of zoo -- eg, historic hill?
+## Chenyue
 
-## Step 2
-Implement user interaction (e.g., listing nodes, selecting desired nodes, selecting if accessible path is desired, then finding shortest path)
+Reading in csv file and creating network.
 
-## Step 3
-Implement reading from csv.
+## Lena
+
+Create csv file
+- classify edges as accessible or non
+
+
+## Jeanna
+
+Function will subclass list (networkx)
+- list out attractions for visitor
+- have them select two
+- return selections
+
+## Karin
+
+Function will subclass shortest path (networkx)
+- input: 2 selections from Jeanna's functions
+- find shortest path
+- offer both accessible and non accessible option (may need to be another function, if so Lena can create)
