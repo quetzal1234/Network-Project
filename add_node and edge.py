@@ -1,23 +1,24 @@
 import csv
 import networkx as nx
 
-#importing csv
-g = nx.DiGraph()
-with open('node_file.csv', newline='', encoding = 'latin-1') as csvfile_1:
-     reader = csv.reader(csvfile_1, delimiter=',')
-     for row in reader:
-        g.add_node(row[0], fullname = row[1], area = row[2], type = row[-1])
-
-with open('edge_file.csv', newline='') as csvfile_2:
-    reader = csv.reader(csvfile_2, delimiter=',')
-    for line in reader:
-        g.add_edge(line[0], line[1], distance=line[2], bidirectional = line[3], weight=line[-1])
-
 
 class zoodirections(nx.DiGraph()):
     def __init__(self):
         super(nx.DiGraph(), self).__init__(g)
         self.nodes = g.nodes
+    
+    def add_node_from_file(self, node_file):
+        with open(node_file, newline='', encoding='latin-1') as nodes:
+            nodereader = csv.reader(nodes, delimiter=',')
+            for row in nodereader:
+                self.add_node(row[0], fullname=row[1], area=row[2], type = row[-1])
+    
+     def add_edge_from_file(self, edge_file):
+        with open(edge_file, newline='') as edges:
+            edgereader = csv.reader(edges, delimiter=',')
+            for line in edgereader:
+                self.add_edge(line[0], line[1], distance=line[2], bidirectional=line[3], weight=line[-1])
+               
     def choose_direction(self):
         while True:
             print(list(self.nodes))
