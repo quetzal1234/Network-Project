@@ -32,7 +32,7 @@ class zoodirections(nx.DiGraph):
         with open(edge_file, newline='') as edges:
             edgereader = csv.reader(edges, delimiter=',')
             for line in edgereader:
-                self.add_edge(line[0], line[1], distance=float(line[2]), bidirectional=line[3], weight=line[-1])
+                self.add_edge(line[0], line[1], distance=float(line[2]), weight=line[-1])
 
     def choose_direction(self):
         '''
