@@ -11,18 +11,35 @@ class zoodirections(nx.DiGraph):
         self._succ = self._adj  # successor
 
     def add_node_from_file(self, node_file):
+        '''
+        This function adds the nodes (exhibits) in the network from a csv. In this case, the nodes are points of
+        interest in the St. Louis Zoo
+        :param node_file: csv
+        :return: nx network
+        '''
         with open(node_file, newline='', encoding='latin-1') as nodes:
             nodereader = csv.reader(nodes, delimiter=',')
             for row in nodereader:
                 self.add_node(row[0], fullname=row[1], area=row[2], type=row[-1])
 
     def add_edge_from_file(self, edge_file):
+        '''
+        This function adds the edges in the network from a csv. The edges are the paths between the points of
+        interest and information about them.
+        :param edge_file: csv
+        :return: nx network
+        '''
         with open(edge_file, newline='') as edges:
             edgereader = csv.reader(edges, delimiter=',')
             for line in edgereader:
                 self.add_edge(line[0], line[1], distance=float(line[2]), bidirectional=line[3], weight=line[-1])
 
     def choose_direction(self):
+        '''
+        This function prompts the user to choose a start and end point for their navigation based on a list of the
+        nodes.
+        :return: a list of two nodes.
+        '''
         while True:
             print(list(self.nodes))
             print('Please select your start point and destination.')
@@ -40,7 +57,7 @@ class zoodirections(nx.DiGraph):
                     directions.append(end.upper())
                     # return directions
                     self.directions = directions
-                if start or end in ['quit', 'Quit']:
+                elif start or end in ['quit', 'Quit']:
                     print('All done now, bye!')
                     break  # exit the loop, which will quit the program
                 else:
@@ -48,16 +65,22 @@ class zoodirections(nx.DiGraph):
                     break
 
     def get_shortest_path(self):
+        '''
+        Finds shortest path between the user selected nodes and prints it for the user.
+        :return: prints to console
+        '''
         # d = self.choose_direction()
         if len(self.directions) == 2:
             user_path = nx.algorithms.shortest_path(self, self.directions[0], self.directions[1], weight='distance', method='dijkstra')
-            return user_path
+            print('Start at')
+            for item in user_path:
+                print(item, 'go to')
+            print('Finish')
         else:
-            False
+            pass
 
 z = zoodirections()
 z.add_node_from_file('node_file.csv')
 z.add_edge_from_file('edge_file.csv')
 z.choose_direction()
 my_path = z.get_shortest_path()
-print(my_path)
