@@ -32,7 +32,7 @@ class zoodirections(nx.DiGraph):
         with open(edge_file, newline='') as edges:
             edgereader = csv.reader(edges, delimiter=',')
             for line in edgereader:
-                self.add_edge(line[0], line[1], distance=float(line[2]), weight=line[-1])
+                self.add_edge(line[0], line[1], distance=float(line[2]), weight=float(line[-1]))
 
     def choose_direction(self):
         '''
@@ -83,6 +83,22 @@ class zoodirections(nx.DiGraph):
         else:
             pass
 
+    @staticmethod
+    def accessible_weight(u,v,d):
+        '''
+        Adjusts the weights for the ADA path.
+        :param u:
+        :param v:
+        :param d:
+        :return: edge_dist: distances weighted by accessibility
+        '''
+        edge_dist = d.get('distance')
+        edge_wt = d.get('weight', 1)
+        if edge_wt == 0:
+            return edge_dist
+        else:
+            return edge_dist * 1000
+
     def get_shortest_ada_path(self):
         '''
         Finds the shortest path excluding edges that are not ada accessible.
@@ -90,11 +106,13 @@ class zoodirections(nx.DiGraph):
         '''
         print('ADA option:')
         if len(self.directions) == 2:
-            ada_path = nx.dijkstra_path(self, self.directions[0], self.directions[1], weight='weight')
+            ada_path = nx.dijkstra_path(self, self.directions[0], self.directions[1], weight= zoodirections.accessible_weight)
             print('Start at')
             for item in ada_path:
                 print(item, 'go to')
             print('Finish')
+        else:
+            pass
 
 
 z = zoodirections()
