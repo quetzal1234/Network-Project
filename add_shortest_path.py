@@ -42,8 +42,11 @@ class zoodirections(nx.DiGraph):
         '''
         while True:
             exhibits = list(self.nodes(data = 'fullname'))
+            exhibits = sorted(exhibits)
+            accum = 0
             for exhibit in exhibits:
-                print(exhibit[0], ';', exhibit[1])
+                accum = accum + 1
+                print(accum,".", exhibit[0],';', exhibit[1])
             print('Please select your start point and destination.')
             print('If you wish to quit, type Quit.')
             start = input('Type the three letter abbreviations of your start point: ')
