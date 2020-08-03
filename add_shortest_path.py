@@ -41,7 +41,9 @@ class zoodirections(nx.DiGraph):
         :return: a list of two nodes.
         '''
         while True:
-            print(list(self.nodes))
+            exhibits = list(self.nodes(data = 'fullname'))
+            for exhibit in exhibits:
+                print(exhibit[0], ';', exhibit[1])
             print('Please select your start point and destination.')
             print('If you wish to quit, type Quit.')
             start = input('Type the three letter abbreviations of your start point: ')
@@ -57,6 +59,7 @@ class zoodirections(nx.DiGraph):
                     directions.append(end.upper())
                     # return directions
                     self.directions = directions
+                    return self.directions
                 elif start or end in ['quit', 'Quit']:
                     print('All done now, bye!')
                     break  # exit the loop, which will quit the program
@@ -71,6 +74,7 @@ class zoodirections(nx.DiGraph):
         '''
         # d = self.choose_direction()
         if len(self.directions) == 2:
+            print('Shortest Path:')
             user_path = nx.algorithms.shortest_path(self, self.directions[0], self.directions[1], weight='distance', method='dijkstra')
             print('Start at')
             for item in user_path:
@@ -79,8 +83,23 @@ class zoodirections(nx.DiGraph):
         else:
             pass
 
+    def get_shortest_ada_path(self):
+        '''
+        Finds the shortest path excluding edges that are not ada accessible.
+        :return: Prints to console
+        '''
+        print('ADA option:')
+        if len(self.directions) == 2:
+            ada_path = nx.dijkstra_path(self, self.directions[0], self.directions[1], weight='weight')
+            print('Start at')
+            for item in ada_path:
+                print(item, 'go to')
+            print('Finish')
+
+
 z = zoodirections()
 z.add_node_from_file('node_file.csv')
 z.add_edge_from_file('edge_file.csv')
 z.choose_direction()
 my_path = z.get_shortest_path()
+z.get_shortest_ada_path()
