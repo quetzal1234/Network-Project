@@ -62,7 +62,10 @@ class zoodirections(nx.DiGraph):
                     directions.append(end.upper())
                     # return directions
                     self.directions = directions
-                    return self.directions
+                    # return self.directions
+                    self.get_shortest_path()
+                    self.get_shortest_ada_path()
+                    continue
                 elif start or end in ['quit', 'Quit']:
                     print('All done now, bye!')
                     break  # exit the loop, which will quit the program
@@ -81,7 +84,7 @@ class zoodirections(nx.DiGraph):
             user_path = nx.algorithms.shortest_path(self, self.directions[0], self.directions[1], weight='distance', method='dijkstra')
             print('Start at')
             for item in user_path:
-                print(item, 'go to')
+                print(self.nodes[item]['fullname'], 'go to')
             print('Finish')
         else:
             pass
@@ -112,15 +115,14 @@ class zoodirections(nx.DiGraph):
             ada_path = nx.dijkstra_path(self, self.directions[0], self.directions[1], weight= zoodirections.accessible_weight)
             print('Start at')
             for item in ada_path:
-                print(item, 'go to')
+                print(self.nodes[item]['fullname'], 'go to')
             print('Finish')
         else:
             pass
-
 
 z = zoodirections()
 z.add_node_from_file('node_file.csv')
 z.add_edge_from_file('edge_file.csv')
 z.choose_direction()
-my_path = z.get_shortest_path()
-z.get_shortest_ada_path()
+# my_path = z.get_shortest_path()
+# z.get_shortest_ada_path()
