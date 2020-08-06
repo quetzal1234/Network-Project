@@ -9,6 +9,8 @@ class zoodirections(nx.DiGraph):
         self.directions = []
         self._pred = self.adjlist_outer_dict_factory()  # predecessor
         self._succ = self._adj  # successor
+        self.startval = ''
+        self.endval = ''
 
     def add_node_from_file(self, node_file):
         '''
@@ -49,10 +51,24 @@ class zoodirections(nx.DiGraph):
                 print(accum,".", exhibit[0],';', exhibit[1])
             print('Please select your start point and destination.')
             print('If you wish to quit, type Quit.')
-            start = input('Type the three letter abbreviations of your start point: ')
+            if(self.endval):
+                inputstr = 'Type the three letter abbreviations of your start point. Default:' + self.endval + ':'
+            else:
+                inputstr = 'Type the three letter abbreviations of your start point:'
+            start = input(inputstr)
+            if len(start) < 1:
+                start = self.endval
+                print('Using ' + self.endval + ' as starting point')
+            if start in ['quit', 'Quit']:
+                print('All done now, bye!')
+                break  # exit the loop, which will quit the program
             if len(start) != 3:  # check prevents a crash
                 continue
             end = input('Type the three letter abbreviation of your end point: ')
+            if end in ['quit', 'Quit']:
+                print('All done now, bye!')
+                break  # exit the loop, which will quit the program
+            self.endval = end.upper()
             if len(end) != 3:  # check prevents a crash
                 continue
             else:
@@ -66,9 +82,9 @@ class zoodirections(nx.DiGraph):
                     self.get_shortest_path()
                     self.get_shortest_ada_path()
                     continue
-                elif start or end in ['quit', 'Quit']:
-                    print('All done now, bye!')
-                    break  # exit the loop, which will quit the program
+                #elif start or end in ['quit', 'Quit']:
+                #    print('All done now, bye!')
+                #    break  # exit the loop, which will quit the program
                 else:
                     print('Unrecognized option! Please try again.')
                     break
@@ -85,7 +101,10 @@ class zoodirections(nx.DiGraph):
             print('Start at')
             for item in user_path:
                 print(self.nodes[item]['fullname'], 'go to')
+                # this is where we need to calculate the distance
             print('Finish')
+            print('Total distance:')
+            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1], weight='distance'))
         else:
             pass
 
@@ -116,7 +135,10 @@ class zoodirections(nx.DiGraph):
             print('Start at')
             for item in ada_path:
                 print(self.nodes[item]['fullname'], 'go to')
+                # this is where we need to calculate the distance
             print('Finish')
+            print('Total distance:')
+            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1], weight=zoodirections.accessible_weight))
         else:
             pass
 
