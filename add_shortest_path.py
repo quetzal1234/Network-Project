@@ -12,6 +12,10 @@ class zoodirections(nx.DiGraph):
         self.startval = ''
         self.endval = ''
 
+    def __str__(self):
+        print("Test that every node can be reached from every other node:")
+        print(nx.is_strongly_connected(self))
+
     def add_node_from_file(self, node_file):
         '''
         This function adds the nodes (exhibits) in the network from a csv. In this case, the nodes are points of
@@ -43,6 +47,7 @@ class zoodirections(nx.DiGraph):
         :return: a list of two nodes.
         '''
         while True:
+            self.__str__()
             exhibits = list(self.nodes(data = 'fullname'))
             exhibits = sorted(exhibits)
             accum = 0
@@ -104,7 +109,8 @@ class zoodirections(nx.DiGraph):
                 # this is where we need to calculate the distance
             print('Finish')
             print('Total distance:')
-            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1], weight='distance'))
+            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1],
+                                          weight='distance'), "min")
         else:
             pass
 
@@ -138,7 +144,8 @@ class zoodirections(nx.DiGraph):
                 # this is where we need to calculate the distance
             print('Finish')
             print('Total distance:')
-            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1], weight=zoodirections.accessible_weight))
+            print(nx.shortest_path_length(self, source=self.directions[0], target=self.directions[1],
+                                          weight=zoodirections.accessible_weight), 'min')
         else:
             pass
 
